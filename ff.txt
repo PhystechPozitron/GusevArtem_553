@@ -1,0 +1,3 @@
+5 /home/work/pr1.out 
+2 /home/work/pr2.out
+3 /home/work/pr3.out
