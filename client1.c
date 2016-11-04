@@ -1,4 +1,4 @@
-// client 
+// client v2.0
 
 #include <sys/types.h>
 #include <sys/ipc.h>
@@ -14,17 +14,12 @@ int main(int argc,char* argv[],char* envp[]) {
 
 	int i = 0, res; 
 
-	// structure of client's message : numbers a and b; id - identifier of client (for server) 
+	// structure of client's message : numbers a and b; 
 	struct mymsgbuf {
 		long mtype;
 		int a,b;  // variables a and b
-		int id; // 
+		int id;//pid of client's process
 	} mybuf;
-
-	/* if ((key = ftok(pathname, 0)) < 0) {
-		printf("Cant generate key ");
-		exit(-1);
-	} */
 
 	// try to get an access to shared memory according to key
 	if((msqid = msgget(key, 0666 | IPC_CREAT)) < 0) {
@@ -35,7 +30,7 @@ int main(int argc,char* argv[],char* envp[]) {
 		mybuf.a = atoi(argv[1]);
 		mybuf.b = atoi(argv[2]);
 		mybuf.mtype = 1;
-		mybuf.id = atoi(argv[3]); //integer number > 0
+		mybuf.id = getpid(); //pid of current process is client's id
 
 		// sending a message
 		if (msgsnd(msqid,(struct msgbuf *) &mybuf, 16, 0) < 0) {
